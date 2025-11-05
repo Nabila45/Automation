@@ -1,0 +1,202 @@
+{
+  "name": "My workflow 3",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nMy name is Nabila. How can I assist you today?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -144,
+        -48
+      ],
+      "id": "db36f195-e7b5-4159-8a94-6e320ada6e65",
+      "name": "When chat message received",
+      "webhookId": "45975d56-24a2-4eb0-b905-a75e4ea9b39c"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are my personal assistant. You have to check the Google sheet and you have to perform the task exactly as I ask for  and also add best regards always with every email Nabila Rahman"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        64,
+        -48
+      ],
+      "id": "c8ab6961-1dba-4fa1-ae42-33b974aaa92b",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        192
+      ],
+      "id": "f9e58807-e76c-4b9d-9f14-9966b49711db",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "msMCN7Bebx5uNhB2",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        192
+      ],
+      "id": "2c61b388-16fb-4c46-a175-fb66ede2531a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1D_iOXpQWKplpNUKuvv_WP69kWM33wZcFJgXshym3qf8",
+          "mode": "list",
+          "cachedResultName": "contactlist",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1D_iOXpQWKplpNUKuvv_WP69kWM33wZcFJgXshym3qf8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1D_iOXpQWKplpNUKuvv_WP69kWM33wZcFJgXshym3qf8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        320,
+        192
+      ],
+      "id": "e618e791-3a92-4b87-b508-16ef5b36e326",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "564HCaFdn5CLTdtz",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false,
+          "senderName": "Nabila Rahman"
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        496,
+        192
+      ],
+      "id": "f5ae0fd3-5227-4081-8727-c23f0e0d8ddd",
+      "name": "Send a message in Gmail",
+      "webhookId": "5474b567-2f41-4021-aca4-5da0752a9896",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FM4WcZlYiFskcYj9",
+          "name": "Gmail account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "8c72bd68-d641-42b3-a197-53ee865fc09a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "49a6d6c19608a6e7362e8b3ec6f7843f7b95345efafcbecd3151cd5dbb33e5c2"
+  },
+  "id": "JMlJMWLTRz32W8Jl",
+  "tags": []
+}
